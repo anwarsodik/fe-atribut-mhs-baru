@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemilihan Atribut Mahasiswa Baru</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .page-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            border-radius: 4px;
+        }
+        .custom-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .custom-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+        }
+        .card-img-example {
+            height: 280px;
+            object-fit: cover;
+            width: 100%;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .card-header-styled {
+            background-color: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.5em 1em;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .status-badge.unselected {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+        .status-badge.selected {
+            background-color: #d1fae5;
+            color: #10b981;
+        }
+        .custom-table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 0 1px #e2e8f0;
+            font-size: 0.85rem;
+        }
+        .custom-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 10px;
+        }
+        .custom-table td {
+            padding: 10px;
+            color: #334155;
+            vertical-align: middle;
+            border-color: #e2e8f0;
+        }
+        .custom-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Dropdown Select Styling */
+        .custom-select {
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 16px;
+            font-size: 1rem;
+            color: #334155;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            appearance: none;
+            background-color: white;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+        }
+        .custom-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            outline: none;
+        }
+        .custom-select option {
+            font-weight: normal;
+        }
+
+        .size-detail-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #475569;
+            display: none; /* Disembunyikan awalnya */
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(16, 185, 129, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-xl py-5">
+    <h2 class="text-center page-title pb-3">Silakan Pilih Atribut dengan Ukuran Anda</h2>
+
+    <form id="attributeForm" class="mt-4">
+        
+        <div class="row g-4 justify-content-center">
+            
+            <!-- KOLOM KIRI: Jas Almamater -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card custom-card h-100">
+                    <!-- Foto Contoh Jas Almamater -->
+                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop" alt="Foto Contoh Jas Almamater" class="card-img-example">
+                    
+                    <div class="card-header card-header-styled d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-user-tie text-primary me-2"></i>Jas Almamater</span>
+                        <span class="status-badge unselected" id="badge-jas">Belum memilih</span>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label for="selectJas" class="form-label fw-bold text-secondary mb-0"><i class="fa-solid fa-ruler-horizontal me-2"></i>Pilihan Ukuran:</label>
+                            
+                            <!-- Tombol Trigger Modal Pop-up Size Chart Jas -->
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#sizeChartJasModal">
+                                <i class="fa-solid fa-table me-1"></i> Lihat Size Chart
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <select class="form-select custom-select" id="selectJas" name="size_jas" required>
+                                <option value="" selected disabled>-- Silakan Pilih Ukuran Jas --</option>
+                                <option value="S">Ukuran S</option>
+                                <option value="M">Ukuran M</option>
+                                <option value="L">Ukuran L</option>
+                                <option value="XL">Ukuran XL</option>
+                                <option value="XXL">Ukuran XXL</option>
+                                <option value="XXXL">Ukuran XXXL</option>
+                                <option value="XXXXL">Ukuran XXXXL</option>
+                                <option value="XXXXXL">Ukuran XXXXXL</option>
+                            </select>
+                        </div>
+
+                        <!-- Area Detail yang muncul setelah dipilih -->
+                        <div class="size-detail-box" id="detailJasBox">
+                            <strong><i class="fa-solid fa-info-circle me-1"></i>Spesifikasi Ukuran <span id="labelJasDetail"></span>:</strong><br>
+                            <span id="textJasDetail" class="d-block mt-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN: Kaos -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card custom-card h-100">
+                    <!-- Foto Contoh Kaos -->
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop" alt="Foto Contoh Kaos Putih" class="card-img-example">
+                    
+                    <div class="card-header card-header-styled d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-tshirt text-primary me-2"></i>Kaos</span>
+                        <span class="status-badge unselected" id="badge-kaos">Belum memilih</span>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label for="selectKaos" class="form-label fw-bold text-secondary mb-0"><i class="fa-solid fa-ruler-combined me-2"></i>Pilihan Ukuran:</label>
+                            
+                            <!-- Tombol Trigger Modal Pop-up Size Chart Kaos -->
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#sizeChartKaosModal">
+                                <i class="fa-solid fa-table me-1"></i> Lihat Size Chart
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <select class="form-select custom-select" id="selectKaos" name="size_kaos" required>
+                                <option value="" selected disabled>-- Silakan Pilih Ukuran Kaos --</option>
+                                <option value="S">Ukuran S</option>
+                                <option value="M">Ukuran M</option>
+                                <option value="L">Ukuran L</option>
+                                <option value="XL">Ukuran XL</option>
+                                <option value="XXL">Ukuran XXL</option>
+                                <option value="XXXL">Ukuran XXXL</option>
+                                <option value="XXXXL">Ukuran XXXXL</option>
+                                <option value="XXXXXL">Ukuran XXXXXL</option>
+                            </select>
+                        </div>
+
+                        <!-- Area Detail yang muncul setelah dipilih -->
+                        <div class="size-detail-box" id="detailKaosBox">
+                            <strong><i class="fa-solid fa-info-circle me-1"></i>Spesifikasi Ukuran <span id="labelKaosDetail"></span>:</strong><br>
+                            <span id="textKaosDetail" class="d-block mt-1"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End of Row -->
+
+        <div class="text-center pt-5 pb-4 mt-3 border-top">
+            <button type="submit" class="btn btn-submit">
+                <i class="fa-solid fa-check me-2"></i>Simpan Pilihan Atribut
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- MODAL POP-UP SIZE CHART JAS -->
+<div class="modal fade" id="sizeChartJasModal" tabindex="-1" aria-labelledby="sizeChartJasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-bottom-0 pb-0 position-relative">
+                <h5 class="modal-title fw-bold text-muted w-100 text-center" id="sizeChartJasModalLabel"><i class="fa-solid fa-ruler me-2"></i>PANDUAN UKURAN JAS</h5>
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3 pb-4 px-4">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-hover text-center custom-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Ukuran</th>
+                                <th>Lebar Dada (cm)</th>
+                                <th>Panjang (cm)</th>
+                                <th>Lengan (cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>S</strong></td><td>48</td><td>68</td><td>53</td></tr>
+                            <tr><td><strong>M</strong></td><td>50</td><td>70</td><td>55</td></tr>
+                            <tr><td><strong>L</strong></td><td>52</td><td>70</td><td>57</td></tr>
+                            <tr><td><strong>XL</strong></td><td>54</td><td>74</td><td>59</td></tr>
+                            <tr><td><strong>XXL</strong></td><td>56</td><td>76</td><td>61</td></tr>
+                            <tr><td><strong>XXXL</strong></td><td>58</td><td>78</td><td>63</td></tr>
+                            <tr><td><strong>XXXXL</strong></td><td>60</td><td>80</td><td>65</td></tr>
+                            <tr><td><strong>XXXXXL</strong></td><td>62</td><td>82</td><td>67</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL POP-UP SIZE CHART KAOS -->
+<div class="modal fade" id="sizeChartKaosModal" tabindex="-1" aria-labelledby="sizeChartKaosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-bottom-0 pb-0 position-relative">
+                <h5 class="modal-title fw-bold text-muted w-100 text-center" id="sizeChartKaosModalLabel"><i class="fa-solid fa-ruler me-2"></i>PANDUAN UKURAN KAOS</h5>
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3 pb-4 px-4">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-hover text-center custom-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Ukuran</th>
+                                <th>Lebar Dada (cm)</th>
+                                <th>Panjang Kaos (cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>S</strong></td><td>46</td><td>66</td></tr>
+                            <tr><td><strong>M</strong></td><td>49</td><td>68</td></tr>
+                            <tr><td><strong>L</strong></td><td>53</td><td>71</td></tr>
+                            <tr><td><strong>XL</strong></td><td>56</td><td>73</td></tr>
+                            <tr><td><strong>XXL</strong></td><td>59</td><td>75</td></tr>
+                            <tr><td><strong>XXXL</strong></td><td>63</td><td>77</td></tr>
+                            <tr><td><strong>XXXXL</strong></td><td>67</td><td>79</td></tr>
+                            <tr><td><strong>XXXXXL</strong></td><td>72</td><td>82</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Data Details for Jas
+        const dataJas = {
+            "S": "Lebar Dada: 48 CM, Panjang: 68 CM, Lengan: 53 CM",
+            "M": "Lebar Dada: 50 CM, Panjang: 70 CM, Lengan: 55 CM",
+            "L": "Lebar Dada: 52 CM, Panjang: 70 CM, Lengan: 57 CM",
+            "XL": "Lebar Dada: 54 CM, Panjang: 74 CM, Lengan: 59 CM",
+            "XXL": "Lebar Dada: 56 CM, Panjang: 76 CM, Lengan: 61 CM",
+            "XXXL": "Lebar Dada: 58 CM, Panjang: 78 CM, Lengan: 63 CM",
+            "XXXXL": "Lebar Dada: 60 CM, Panjang: 80 CM, Lengan: 65 CM",
+            "XXXXXL": "Lebar Dada: 62 CM, Panjang: 82 CM, Lengan: 67 CM"
+        };
+
+        // Data Details for Kaos
+        const dataKaos = {
+            "S": "Lebar Dada: 46 CM, Panjang Kaos: 66 CM",
+            "M": "Lebar Dada: 49 CM, Panjang Kaos: 68 CM",
+            "L": "Lebar Dada: 53 CM, Panjang Kaos: 71 CM",
+            "XL": "Lebar Dada: 56 CM, Panjang Kaos: 73 CM",
+            "XXL": "Lebar Dada: 59 CM, Panjang Kaos: 75 CM",
+            "XXXL": "Lebar Dada: 63 CM, Panjang Kaos: 77 CM",
+            "XXXXL": "Lebar Dada: 67 CM, Panjang Kaos: 79 CM",
+            "XXXXXL": "Lebar Dada: 72 CM, Panjang Kaos: 82 CM"
+        };
+
+
+        // Handle Jas Dropdown Select
+        const selectJas = document.getElementById('selectJas');
+        const badgeJas = document.getElementById('badge-jas');
+        const detailJasBox = document.getElementById('detailJasBox');
+        const labelJasDetail = document.getElementById('labelJasDetail');
+        const textJasDetail = document.getElementById('textJasDetail');
+
+        selectJas.addEventListener('change', function() {
+            if(this.value) {
+                badgeJas.textContent = 'Terpilih: ' + this.value;
+                badgeJas.classList.replace('unselected', 'selected');
+                this.classList.add('border-primary'); 
+                
+                // Show dynamic detail
+                labelJasDetail.textContent = this.value;
+                textJasDetail.textContent = dataJas[this.value];
+                detailJasBox.style.display = 'block';
+            }
+        });
+
+        // Handle Kaos Dropdown Select
+        const selectKaos = document.getElementById('selectKaos');
+        const badgeKaos = document.getElementById('badge-kaos');
+        const detailKaosBox = document.getElementById('detailKaosBox');
+        const labelKaosDetail = document.getElementById('labelKaosDetail');
+        const textKaosDetail = document.getElementById('textKaosDetail');
+
+        selectKaos.addEventListener('change', function() {
+            if(this.value) {
+                badgeKaos.textContent = 'Terpilih: ' + this.value;
+                badgeKaos.classList.replace('unselected', 'selected');
+                this.classList.add('border-primary'); 
+                
+                // Show dynamic detail
+                labelKaosDetail.textContent = this.value;
+                textKaosDetail.textContent = dataKaos[this.value];
+                detailKaosBox.style.display = 'block';
+            }
+        });
+
+        // Form Validation on Submit
+        const form = document.getElementById('attributeForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const selectedJas = selectJas.value;
+            const selectedKaos = selectKaos.value;
+            
+            if (!selectedJas || !selectedKaos) {
+                alert('Mohon lengkapi pilihan ukuran untuk Jas Almamater dan Kaos terlebih dahulu.');
+                return;
+            }
+            
+            // Success action
+            alert(`Pilihan berhasil disimpan!\n\nJas Almamater: ${selectedJas}\nKaos: ${selectedKaos}`);
+        });
+    });
+</script>
+</body>
+</html>
